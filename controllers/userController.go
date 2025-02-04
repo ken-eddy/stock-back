@@ -87,9 +87,9 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 	// isProduction := os.Getenv("GIN_MODE") == "release"
-	c.SetCookie("token", tokenString, 86400, "/", "", false, false)
+	// c.SetCookie("token", tokenString, 86400, "/", "", false, false)
 
-	// c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	c.SetCookie("token", tokenString, 86400, "/", "", true, true)
 
 	// Return success response
 	c.JSON(http.StatusCreated, gin.H{

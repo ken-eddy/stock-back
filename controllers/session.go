@@ -14,8 +14,8 @@ import (
 
 func VerifyAuth(c *gin.Context) {
 	// Security headers
-	c.Header("Cache-Control", "no-store")
-	c.Header("Pragma", "no-cache")
+	// c.Header("Cache-Control", "no-store")
+	// c.Header("Pragma", "no-cache")
 
 	// Get user ID from context
 	userID, exists := c.Get("user_id")
