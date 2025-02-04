@@ -89,7 +89,18 @@ func CreateUser(c *gin.Context) {
 	// isProduction := os.Getenv("GIN_MODE") == "release"
 	// c.SetCookie("token", tokenString, 86400, "/", "", false, false)
 
-	c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	// c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	// isProduction := os.Getenv("GIN_MODE") == "release"
+	// secureFlag := isProduction // Secure=true in production, false otherwise
+
+	// c.SetCookie("token", tokenString, 86400, "/", "", secureFlag, true)
+	// Replace the existing c.SetCookie() with:
+	cookie := fmt.Sprintf(
+		"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+		tokenString,
+		86400,
+	)
+	c.Header("Set-Cookie", cookie)
 
 	// Return success response
 	c.JSON(http.StatusCreated, gin.H{

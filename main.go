@@ -38,6 +38,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -67,11 +68,19 @@ func main() {
 	router := gin.Default()
 
 	// 🔥 FIX: Configure CORS properly
+	// router.Use(cors.New(cors.Config{
+	// 	AllowOrigins:     []string{"http://localhost:3000"}, // Allow frontend
+	// 	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	// 	AllowHeaders:     []string{"Authorization", "Content-Type"},
+	// 	AllowCredentials: true,
+	// }))
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"}, // Allow frontend
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Authorization", "Content-Type"},
+		AllowOrigins:     []string{"http://localhost:3000"}, // Your frontend URL
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
 		AllowCredentials: true,
+		ExposeHeaders:    []string{"Set-Cookie"},
+		MaxAge:           12 * time.Hour,
 	}))
 
 	// Setup routes
