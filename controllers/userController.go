@@ -86,8 +86,8 @@ func CreateUser(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Could not create token"})
 		return
 	}
-	isProduction := os.Getenv("GIN_MODE") == "release"
-	c.SetCookie("token", tokenString, 86400, "/", "", isProduction, true)
+	// isProduction := os.Getenv("GIN_MODE") == "release"
+	c.SetCookie("token", tokenString, 86400, "/", "", false, false)
 
 	// c.SetCookie("token", tokenString, 86400, "/", "", true, true)
 
