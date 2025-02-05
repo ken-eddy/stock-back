@@ -148,9 +148,15 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	isProduction := os.Getenv("GIN_MODE") == "release"
-	c.SetCookie("token", tokenString, 86400, "/", "", isProduction, true)
-	// c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	// isProduction := os.Getenv("GIN_MODE") == "release"
+	// c.SetCookie("token", tokenString, 86400, "/", "", isProduction, true)
+	// // c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	cookie := fmt.Sprintf(
+		"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+		tokenString,
+		86400,
+	)
+	c.Header("Set-Cookie", cookie)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Login successful",

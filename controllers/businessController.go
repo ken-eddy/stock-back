@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -96,7 +97,13 @@ func CreateBusiness(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	// c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	cookie := fmt.Sprintf(
+		"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+		tokenString,
+		86400,
+	)
+	c.Header("Set-Cookie", cookie)
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "Business created successfully",
@@ -168,7 +175,13 @@ func LoginBusiness(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	// c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	cookie := fmt.Sprintf(
+		"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+		tokenString,
+		86400,
+	)
+	c.Header("Set-Cookie", cookie)
 
 	c.JSON(http.StatusOK, gin.H{
 		"business": gin.H{
