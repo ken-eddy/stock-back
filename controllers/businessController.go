@@ -404,3 +404,89 @@ func ChangeBusinessPassword(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Business password updated successfully"})
 }
+
+// DeleteCategory - Deletes a category if no products are associated with it
+func DeleteCategory(c *gin.Context) {
+	businessID, exists := c.Get("business_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized - Business context required"})
+		return
+	}
+
+	categoryID := c.Param("id")
+
+	// Check if the category exists and belongs to the business
+	var category models.Category
+	if err := database.DB.Where("id = ? AND business_id = ?", categoryID, businessID).
+		First(&category).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Category not found"})
+		return
+	}
+
+	// Check if the category has associated products
+	var productCount int64
+	if err := database.DB.Model(&models.Product{}).
+		Where("category_id = ?", categoryID).
+		Count(&productCount).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check associated products"})
+		return
+	}
+
+	if productCount > 0 {
+		c.JSON(http.StatusForbidden, gin.H{"error": "Cannot delete category with associated products"})
+		return
+	}
+
+	// Delete the category
+	if err := database.DB.Delete(&category).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete category"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Category deleted successfully"})
+}
+
+// EditCategory - Updates the name of a category
+func EditCategory(c *gin.Context) {
+	businessID, exists := c.Get("business_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized - Business context required"})
+		return
+	}
+
+	categoryID := c.Param("id")
+	var input struct {
+		Name string `json:"name" binding:"required,min=2,max=50"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Check if the category exists and belongs to the business
+	var category models.Category
+	if err := database.DB.Where("id = ? AND business_id = ?", categoryID, businessID).
+		First(&category).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Category not found"})
+		return
+	}
+
+	// Check if another category with the same name exists in the business
+	var existing models.Category
+	if err := database.DB.Where("business_id = ? AND LOWER(name) = ? AND id != ?",
+		businessID, strings.ToLower(input.Name), categoryID).
+		First(&existing).Error; err == nil {
+		c.JSON(http.StatusConflict, gin.H{"error": "Category name already exists in your business"})
+		return
+	}
+
+	// Update category name
+	category.Name = strings.TrimSpace(input.Name)
+	if err := database.DB.Save(&category).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update category"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Category updated successfully", "category": category})
+}

@@ -123,6 +123,8 @@ func SetupRoutes(router *gin.Engine) {
 		protected.GET("/categories", controllers.GetCategories)
 		protected.GET("/categories/:id/products", controllers.GetCategoryProducts)
 		protected.GET("/categories/:id", controllers.GetCategory)
+		protected.DELETE("/categories/:id", controllers.DeleteCategory)
+		protected.PUT("/categories/:id", controllers.EditCategory)
 
 		// Sales routes
 		sales := protected.Group("/sales")
