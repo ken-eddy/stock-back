@@ -98,8 +98,14 @@ func CreateBusiness(c *gin.Context) {
 	}
 
 	// c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	// cookie := fmt.Sprintf(
+	// 	"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+	// 	tokenString,
+	// 	86400,
+	// )
+	// c.Header("Set-Cookie", cookie)
 	cookie := fmt.Sprintf(
-		"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+		"token=%s; Path=/; Domain=stock-back-73md.onrender.com; Max-Age=%d; Secure; HttpOnly; SameSite=None",
 		tokenString,
 		86400,
 	)
@@ -176,8 +182,14 @@ func LoginBusiness(c *gin.Context) {
 	}
 
 	// c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	// cookie := fmt.Sprintf(
+	// 	"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+	// 	tokenString,
+	// 	86400,
+	// )
+	// c.Header("Set-Cookie", cookie)
 	cookie := fmt.Sprintf(
-		"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+		"token=%s; Path=/; Domain=stock-back-73md.onrender.com; Max-Age=%d; Secure; HttpOnly; SameSite=None",
 		tokenString,
 		86400,
 	)

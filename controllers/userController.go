@@ -95,8 +95,14 @@ func CreateUser(c *gin.Context) {
 
 	// c.SetCookie("token", tokenString, 86400, "/", "", secureFlag, true)
 	// Replace the existing c.SetCookie() with:
+	// cookie := fmt.Sprintf(
+	// 	"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+	// 	tokenString,
+	// 	86400,
+	// )
+	// c.Header("Set-Cookie", cookie)
 	cookie := fmt.Sprintf(
-		"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+		"token=%s; Path=/; Domain=stock-back-73md.onrender.com; Max-Age=%d; Secure; HttpOnly; SameSite=None",
 		tokenString,
 		86400,
 	)
@@ -151,8 +157,14 @@ func Login(c *gin.Context) {
 	// isProduction := os.Getenv("GIN_MODE") == "release"
 	// c.SetCookie("token", tokenString, 86400, "/", "", isProduction, true)
 	// // c.SetCookie("token", tokenString, 86400, "/", "", true, true)
+	// cookie := fmt.Sprintf(
+	// 	"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+	// 	tokenString,
+	// 	86400,
+	// )
+	// c.Header("Set-Cookie", cookie)
 	cookie := fmt.Sprintf(
-		"token=%s; Path=/; Max-Age=%d; Secure; HttpOnly; SameSite=None",
+		"token=%s; Path=/; Domain=stock-back-73md.onrender.com; Max-Age=%d; Secure; HttpOnly; SameSite=None",
 		tokenString,
 		86400,
 	)

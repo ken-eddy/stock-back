@@ -75,7 +75,7 @@ func main() {
 	// 	AllowCredentials: true,
 	// }))
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"}, // Your frontend URL
+		AllowOrigins:     []string{"http://localhost:3000", "https://stock-front-rho.vercel.app"}, // Your frontend URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
 		AllowCredentials: true,
